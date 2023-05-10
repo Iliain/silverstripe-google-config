@@ -144,7 +144,7 @@ class GoogleConfig extends DataObject
     }
 
     /**
-     * Setup a default SiteConfig record if none exists.
+     * Setup a default GoogleConfig record if none exists.
      */
     public function requireDefaultRecords()
     {
@@ -160,7 +160,7 @@ class GoogleConfig extends DataObject
     }
 
     /**
-     * Create googleConfig with defaults from language file.
+     * Create GoogleConfig with defaults from language file.
      *
      * @return GoogleConfig
      */
@@ -186,27 +186,30 @@ class GoogleConfig extends DataObject
     {
         $key = Environment::getEnv('GOOGLE_PLACE_API_KEY');
 
-        if (!$key) {
+        if (!$key || !$placeID) {
             return false;
         }
 
         return 'https://maps.googleapis.com/maps/api/place/details/json?place_id=' . $placeID . '&fields=name,rating,reviews&key=' . Environment::getEnv('GOOGLE_PLACE_API_KEY');
     }
 
-    public function getPlaceTitle($placeID)
+    public function getPlaceTitle($placeID = null)
     {
         try {
             $url = $this->getAPIURL($placeID);
-            $json = file_get_contents($url);
-            $obj = json_decode($json);
 
-            if ($obj && isset($obj->result)) {
-                return $obj->result->name;
-            } else {
-                return null;
+            if ($url) {
+                $json = file_get_contents($url);
+                $obj = json_decode($json);
+
+                if ($obj && isset($obj->result)) {
+                    return $obj->result->name;
+                }
             }
+            
+            return null;
         } catch (Exception $e) {
-            return 'Error: ' . $e->getMessage();
+            throw new Exception($e->getMessage());
         }
     }
 }
