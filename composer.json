@@ -13,7 +13,7 @@
     "require": {
         "php": "^7 || ^8",
         "silverstripe/framework": "^4 || ^5",
-        "unclecheese/display-logic": "^2"
+        "unclecheese/display-logic": "^2 || ^3"
     },
     "autoload": {
         "psr-4": {
