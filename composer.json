@@ -12,7 +12,8 @@
     "homepage": "http://github.com/Iliain/silverstripe-google-config",
     "require": {
         "php": "^7 || ^8",
-        "silverstripe/framework": "^4 || ^5"
+        "silverstripe/framework": "^4 || ^5",
+        "unclecheese/display-logic": "^2"
     },
     "autoload": {
         "psr-4": {
