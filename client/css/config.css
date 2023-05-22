@@ -1,0 +1,50 @@
+.reviews-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 15px;
+}
+
+.info-left {
+    margin-right: 1em;
+}
+
+.info-left img {
+    border-radius: 25%;
+}
+
+.info-place {
+    font-weight: bold;
+}
+
+.review-link {
+    margin-top: 0.7em;
+}
+
+.review-link a {
+    color: #fff!important;
+    padding: 8px 20px 10px;
+    background: #0a6cff;
+    text-shadow: 1px 1px 0 #888;
+    box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
+}
+
+.g-icon {
+    background-image: url(https://maps.gstatic.com/mapfiles/embed/images/entity11.png);
+    background-size: 70px 210px;
+}
+
+.rating-star {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    overflow: hidden;
+}
+
+.rating-full-star {
+    background-position: 48px 165px;
+}
+
+.rating-half-star {
+    background-position: 35px 165px;
+}

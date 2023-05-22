@@ -11,7 +11,7 @@ Provides an admin interface separate from the Settings panel that lets users man
 Depending on which APIs you're using, you may need to include environment variables for your keys, like so:
 
 ```
-GOOGLE_PLACE_API_KEY="xxxxxxxxxxxxxxxxxxxxx"
+GOOGLE_MAPS_API_KEY="xxxxxxxxxxxxxxxxxxxxx"
 ```
 
 Currently this module uses the following APIs:
@@ -26,6 +26,10 @@ You can call data from the Google settings on the frontend via `$GoogleConfig`, 
 {$GoogleConfig.HeadScripts.RAW}
 
 <% with $GoogleConfig %>
-    <h1>{$PlaceTitle}</h1>
+    <% if $Places %>
+        <% loop $Places %>
+            ...
+        <% end_loop>
+    <% end_if %>
 <% end_with %>
 ```

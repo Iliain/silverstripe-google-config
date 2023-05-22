@@ -20,5 +20,10 @@
             "Iliain\\GoogleConfig\\": "src/"
         }
     },
+    "extra": {
+        "expose": [
+            "client/css"
+        ]
+    },
     "minimum-stability": "dev"
 }
