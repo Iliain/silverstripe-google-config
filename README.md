@@ -33,3 +33,13 @@ You can call data from the Google settings on the frontend via `$GoogleConfig`, 
     <% end_if %>
 <% end_with %>
 ```
+
+## Places 
+
+Setting up a Place in the CMS
+
+![Example of setting up a Place](docs/images/place-fields.png)
+
+The list of places in the CMS
+
+![List of Places](docs/images/place-gridfield.png)

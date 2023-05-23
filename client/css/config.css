@@ -30,21 +30,22 @@
 }
 
 .g-icon {
-    background-image: url(https://maps.gstatic.com/mapfiles/embed/images/entity11.png);
-    background-size: 70px 210px;
+    /*  */
 }
 
 .rating-star {
     display: inline-block;
-    width: 11px;
-    height: 11px;
+    width: 16px;
+    height: 15px;
     overflow: hidden;
 }
 
 .rating-full-star {
-    background-position: 48px 165px;
+    background-image: url("https://maps.gstatic.com/consumer/images/icons/2x/ic_star_rate_14.png");
+    background-size: cover;
 }
 
 .rating-half-star {
-    background-position: 35px 165px;
+    background-image: url("https://maps.gstatic.com/consumer/images/icons/2x/ic_star_rate_half_14.png");
+    background-size: cover;
 }

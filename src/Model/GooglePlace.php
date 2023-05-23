@@ -3,7 +3,7 @@
 namespace Iliain\GoogleConfig\Models;
 
 use Exception;
-use SilverStripe\Forms\ToggleCompositeField;
+use SilverStripe\Dev\Debug;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
@@ -11,7 +11,9 @@ use SilverStripe\Core\Environment;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextareaField;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use Iliain\GoogleConfig\Models\GoogleConfig;
+use SilverStripe\Forms\ToggleCompositeField;
 
 class GooglePlace extends DataObject 
 {
@@ -27,6 +29,7 @@ class GooglePlace extends DataObject
     ];
 
     private static $summary_fields = [
+        'getCMSImage'       => 'Image',
         'Title'             => 'Title',
         'getPlaceRating'    => 'Rating',
         'PlaceID'           => 'Place ID'
@@ -242,5 +245,12 @@ class GooglePlace extends DataObject
         }
 
         return null;
+    }
+
+    public function getCMSImage()
+    {
+        $text = DBHTMLText::create('Thumbnail');
+        $text->setValue('<img src="' . $this->getPlacePhoto() . '" style="width: 100px; height: 100px; object-fit: cover;" />');
+        return $text;
     }
 }
