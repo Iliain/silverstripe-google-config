@@ -36,10 +36,7 @@ You can call data from the Google settings on the frontend via `$GoogleConfig`, 
 
 ## Places 
 
-Setting up a Place in the CMS
+Setting up a Place in the CMS, with an example of the Review data
 
 ![Example of setting up a Place](docs/images/place-fields.png)
 
-The list of places in the CMS
-
-![List of Places](docs/images/place-gridfield.png)
