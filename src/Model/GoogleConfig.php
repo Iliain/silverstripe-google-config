@@ -13,12 +13,13 @@ use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\Security\Permission;
+use Iliain\GoogleConfig\Models\GooglePlace;
 use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\View\TemplateGlobalProvider;
 use Iliain\GoogleConfig\Admin\GoogleLeftAndMain;
-use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 
-class GoogleConfig extends DataObject
+class GoogleConfig extends DataObject implements TemplateGlobalProvider
 {
     private static $table_name = 'GoogleConfig';
 
@@ -26,10 +27,6 @@ class GoogleConfig extends DataObject
         'HeadScripts'       => 'Text',
         'BodyStartScripts'  => 'Text',
         'BodyEndScripts'    => 'Text'
-    ];
-
-    private static $has_many = [
-        'Places'            => GooglePlace::class
     ];
 
     private static $required_permission = [
@@ -64,15 +61,16 @@ class GoogleConfig extends DataObject
             TextareaField::create('BodyEndScripts', 'Scripts before </body>')->setRows(10),
         ]);
 
-        $reviewGridConf = GridFieldConfig_RelationEditor::create()
-            ->addComponent(new GridFieldDeleteAction());
+        $reviewGridConf = GridFieldConfig_RecordEditor::create()::create();
         $grid = GridField::create(
             'Places',
             'Places',
-            $this->Places(),
+            GooglePlace::get(),
             $reviewGridConf
         );
         $fields->addFieldToTab('Root.Places', $grid);
+
+        $this->extend('updateCMSFields', $fields);
 
         return $fields;
     }
@@ -164,5 +162,10 @@ class GoogleConfig extends DataObject
         return [
             'GoogleConfig' => 'current_google_config',
         ];
+    }
+
+    public function getPlaces()
+    {
+        return GooglePlace::get();
     }
 }

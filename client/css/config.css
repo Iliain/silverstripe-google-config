@@ -1,6 +1,6 @@
 /* Place */
 .place-badge-outer {
-    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    padding: 1.5rem 1.5rem 2rem 1.5rem; 
     border-radius: 5px;
     border-width: 1px;
     box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
@@ -19,7 +19,7 @@
 }
 
 .info-left img {
-    border-radius: 10px;
+    border-radius: 100%;
     box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
 }
 

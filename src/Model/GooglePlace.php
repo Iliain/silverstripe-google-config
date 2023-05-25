@@ -25,10 +25,6 @@ class GooglePlace extends DataObject
         'PlaceData'         => 'Text',
     ];
 
-    private static $has_one = [
-        'GoogleConfig'      => GoogleConfig::class
-    ];
-
     private static $summary_fields = [
         'getCMSImage'       => 'Image',
         'Title'             => 'Title',
@@ -78,28 +74,18 @@ class GooglePlace extends DataObject
         // If place data is present, construct badge
         $placeData = $this->PlaceData;
         if ($placeData) {
-            $placeData = json_decode($placeData);
-            
-            $rating = $this->getPlaceField('rating');
-            $stars = $this->convertRatingNumberToArray($rating);
+            $reviewData = $this->getReviewData();
 
             $fields->addFieldsToTab('Root.Main', [
-                LiteralField::create('ReviewFeed', $this->customise([
-                    'Title'     => $this->getPlaceField('name'),
-                    'PlaceID'   => $this->PlaceID,
-                    'Link'      => $this->getPlaceField('url'),
-                    'Image'     => $this->getPlacePhoto(),
-                    'Reviews'   => $this->getPlaceReviews(),
-                    'Total'     => $this->getPlaceField('user_ratings_total'),
-                    'Rating'    => $this->getPlaceField('rating'),
-                    'Stars'     => $stars
-                ])->renderWith('Iliain\\GoogleConfig\\Models\\GoogleConfigReviews')),
+                LiteralField::create('ReviewFeed', $this->customise($reviewData)->renderWith('Iliain\\GoogleConfig\\Models\\GoogleConfigReviews')),
             ]);
         }
 
         $fields->addFieldsToTab('Root.Config', [
             TextareaField::create('PlaceData', 'Data')->setRows(20)
         ]);
+
+        $this->extend('updateCMSFields', $fields);
 
         return $fields;
     }
@@ -272,14 +258,40 @@ class GooglePlace extends DataObject
         return $stars;
     }
 
+    public function getReviewData()
+    {
+        $rating = $this->getPlaceField('rating');
+        $stars = $this->convertRatingNumberToArray($rating);
+
+        $data = [
+            'Title'     => $this->getPlaceField('name'),
+            'PlaceID'   => $this->PlaceID,
+            'Link'      => $this->getPlaceField('url'),
+            'Image'     => $this->getPlacePhoto(),
+            'Reviews'   => $this->getPlaceReviews(),
+            'Total'     => $this->getPlaceField('user_ratings_total'),
+            'Rating'    => $this->getPlaceField('rating'),
+            'Stars'     => $stars
+        ];
+
+        return $data;
+    }
+
     public function getReviewsList()
     {
         $reviews = $this->getPlaceReviews();
 
         if ($reviews) {
-            return $reviews->renderWith('Iliain\\GoogleConfig\\Models\\ReviewsList');
+            return $this->customise([
+                'Reviews' => $reviews
+            ])->renderWith('Iliain\\GoogleConfig\\Models\\ReviewsList');
         }
 
         return null;
+    }
+
+    public function getBadge()
+    {
+        return $this->customise($this->getReviewData())->renderWith('Iliain\\GoogleConfig\\Models\\ReviewBadge');
     }
 }
