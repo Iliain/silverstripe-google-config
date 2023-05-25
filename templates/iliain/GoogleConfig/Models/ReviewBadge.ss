@@ -2,7 +2,7 @@
     <div class="place-badge-inner">
 
         <div class="info-left">
-            <img src="{$Image}" alt="{$Title}" width="100" height="100" title="{$Title}">
+            <img src="{$Image}" alt="{$Title}" width="100" height="100" title="{$Title}" class="badge-image">
         </div>
 
         <div class="info-right">
@@ -33,4 +33,4 @@
     </div>
 </div>
 
-<% require css("iliain/silverstripe-google-config: client/css/config.css") %>
+<% require css("iliain/silverstripe-google-config: client/css/badge.css") %>

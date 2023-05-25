@@ -34,4 +34,4 @@
     </div>
 <% end_if %>
 
-<% require css("iliain/silverstripe-google-config: client/css/config.css") %>
+<% require css("iliain/silverstripe-google-config: client/css/review.css") %>
