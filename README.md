@@ -40,3 +40,9 @@ Setting up a Place in the CMS, with an example of the Review data
 
 ![Example of setting up a Place](docs/images/place-fields.png)
 
+With a selected Place, you can render the badge and feed in your template with `$ReviewBadge` and `$ReviewsList` respectively.
+
+## TODO
+
+* Add more APIs
+* Update CSS to properly render as-is on the frontend (like a widget)
