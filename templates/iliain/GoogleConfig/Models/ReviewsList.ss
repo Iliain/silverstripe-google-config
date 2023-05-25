@@ -28,7 +28,7 @@
                     </div>
                 </div>
             
-                <p>{$Text.LimitCharacters(120,'...')}</p>
+                <p class="review-text">{$Text.LimitCharacters(500,'...')}</p>
             </div>
         <% end_loop %>
     </div>
