@@ -271,4 +271,15 @@ class GooglePlace extends DataObject
 
         return $stars;
     }
+
+    public function getReviewsList()
+    {
+        $reviews = $this->getPlaceReviews();
+
+        if ($reviews) {
+            return $reviews->renderWith('Iliain\\GoogleConfig\\Models\\ReviewsList');
+        }
+
+        return null;
+    }
 }
