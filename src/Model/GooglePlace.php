@@ -11,6 +11,7 @@ use SilverStripe\Core\Environment;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextareaField;
+use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use Iliain\GoogleConfig\Models\GoogleConfig;
 use SilverStripe\Forms\ToggleCompositeField;
@@ -80,21 +81,7 @@ class GooglePlace extends DataObject
             $placeData = json_decode($placeData);
             
             $rating = $this->getPlaceField('rating');
-            $ratingArr = explode('.', $rating);
-            
-            if (count($ratingArr) > 1) {
-                $decimal = $ratingArr[1];
-            } else {
-                $decimal = '0';
-            }
-
-            $stars = ArrayList::create();
-            for ($i = 0; $i < $ratingArr[0]; $i++) {
-                $stars->push(['Full' => true]);
-            }
-            if ($decimal != '0') {
-                $stars->push(['Full' => false]);
-            }
+            $stars = $this->convertRatingNumberToArray($rating);
 
             $fields->addFieldsToTab('Root.Main', [
                 LiteralField::create('ReviewFeed', $this->customise([
@@ -105,13 +92,10 @@ class GooglePlace extends DataObject
                     'Reviews'   => $this->getPlaceReviews(),
                     'Total'     => $this->getPlaceField('user_ratings_total'),
                     'Rating'    => $this->getPlaceField('rating'),
-                    'Decimal'   => $decimal != '0' ? true : false,
                     'Stars'     => $stars
                 ])->renderWith('Iliain\\GoogleConfig\\Models\\GoogleConfigReviews')),
             ]);
         }
-
-        // @TODO show carousel of reviews
 
         $fields->addFieldsToTab('Root.Config', [
             TextareaField::create('PlaceData', 'Data')->setRows(20)
@@ -231,12 +215,17 @@ class GooglePlace extends DataObject
             $reviews = ArrayList::create();
 
             foreach ($data->reviews as $review) {
+                $stars = $this->convertRatingNumberToArray($review->rating);
+
+                $textField = DBText::create('Text');
+                $textField->setValue($review->text);
+
                 $reviews->push([
                     'Author'    => $review->author_name,
                     'AuthorURL' => $review->author_url,
                     'Photo'     => $review->profile_photo_url,
-                    'Rating'    => $review->rating,
-                    'Text'      => $review->text,
+                    'Stars'     => $stars,
+                    'Text'      => $textField,
                     'Time'      => $review->relative_time_description,
                 ]);
             }
@@ -252,5 +241,34 @@ class GooglePlace extends DataObject
         $text = DBHTMLText::create('Thumbnail');
         $text->setValue('<img src="' . $this->getPlacePhoto() . '" style="width: 100px; height: 100px; object-fit: cover;" />');
         return $text;
+    }
+
+    public function convertRatingNumberToArray($rating)
+    {
+        $ratingArr = explode('.', $rating);
+            
+        if (count($ratingArr) > 1) {
+            $decimal = $ratingArr[1];
+        } else {
+            $decimal = '0';
+        }
+
+        $stars = ArrayList::create();
+
+        for ($i = 0; $i < $ratingArr[0]; $i++) {
+            $stars->push(['Value' => 'full']);
+        }
+
+        if ($decimal != '0') {
+            $stars->push(['Value' => 'half']);
+        }
+
+        $remainingStars = 5 - $stars->count();
+
+        for ($i = 0; $i < $remainingStars; $i++) {
+            $stars->push(['Value' => 'empty']);
+        }
+
+        return $stars;
     }
 }

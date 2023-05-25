@@ -1,0 +1,31 @@
+<div class="review-badge-outer">
+    <div class="review-box-upper">
+
+        <div class="info-left">
+            <img src="{$Photo}" alt="{$Author}" width="100" height="100" title="{$Author}" class="user-image">
+        </div>
+
+        <div class="info-right">
+            <a href="{$AuthorURL}" target="_blank" rel="nofollow noopener" class="author-link">
+                <span>{$Author}</span>
+            </a>
+        </div>
+
+    </div>
+
+    <div class="review-box-lower">
+        <div class="review-rating">
+            <span class="google-stars">
+                <% loop $Stars %>
+                    <div class="rating-star rating-{$Value}-star"></div>
+                <% end_loop %>
+            </span>
+
+            <span class="rating-value">{$Time}</span>
+        </div>
+    </div>
+
+    <p>{$Text.LimitCharacters(120,'...')}</p>
+</div>
+
+<% require css("iliain/silverstripe-google-config: client/css/config.css") %>
