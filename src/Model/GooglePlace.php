@@ -3,7 +3,6 @@
 namespace Iliain\GoogleConfig\Models;
 
 use Exception;
-use SilverStripe\Dev\Debug;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
@@ -127,10 +126,14 @@ class GooglePlace extends DataObject
 
         $data = json_decode($data);
 
-        $url = 'https://maps.googleapis.com/maps/api/place/photo' .
+        if (isset($data->photos) && isset($data->photos[0])) {
+            $url = 'https://maps.googleapis.com/maps/api/place/photo' .
             '?maxwidth=400' .
             '&photoreference=' . $data->photos[0]->photo_reference .
             '&key=' . $key;
+        } else {
+            $url = $data->icon;
+        }
 
         return $url;
     }
