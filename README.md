@@ -1,5 +1,11 @@
 # Silverstripe Google Config
 
+[![Latest Stable Version](http://poser.pugx.org/iliain/silverstripe-google-config/v)](https://packagist.org/packages/iliain/silverstripe-google-config) 
+[![Total Downloads](http://poser.pugx.org/iliain/silverstripe-google-config/downloads)](https://packagist.org/packages/iliain/silverstripe-google-config) 
+[![Latest Unstable Version](http://poser.pugx.org/iliain/silverstripe-google-config/v/unstable)](https://packagist.org/packages/iliain/silverstripe-google-config) 
+[![License](http://poser.pugx.org/iliain/silverstripe-google-config/license)](https://packagist.org/packages/iliain/silverstripe-google-config) 
+[![PHP Version Require](http://poser.pugx.org/iliain/silverstripe-google-config/require/php)](https://packagist.org/packages/iliain/silverstripe-google-config)
+
 Provides an admin interface separate from the Settings panel that lets users manage things like their GTM scripts, reviews, etc.
 
 ## Installation (with composer)
