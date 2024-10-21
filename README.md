@@ -40,6 +40,15 @@ You can call data from the Google settings on the frontend via `$GoogleConfig`, 
 <% end_with %>
 ```
 
+### GTM Scripts
+
+You can render the GTM scripts in your template with the following: 
+
+* `$HeadScripts.RAW`
+* `$BodyStartScripts.RAW`
+* `$BodyEndScripts.RAW`
+
+
 ## Places 
 
 Setting up a Place in the CMS, with an example of the Review data
@@ -50,5 +59,7 @@ With a selected Place, you can render the badge and feed in your template with `
 
 ## TODO
 
+* Fix the issue of the CMS needing to be reloaded for the map to appear when going back and viewing another map
 * Add more APIs
 * Update CSS to properly render as-is on the frontend (like a widget)
+* Allow enabling/disabling of specific Admin sections

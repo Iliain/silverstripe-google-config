@@ -3,6 +3,7 @@
 namespace Iliain\GoogleConfig\Models;
 
 use Exception;
+use Iliain\GoogleConfig\Fields\GoogleMapField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
@@ -12,7 +13,6 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use Iliain\GoogleConfig\Models\GoogleConfig;
 use SilverStripe\Forms\ToggleCompositeField;
 
 class GooglePlace extends DataObject 
@@ -64,9 +64,9 @@ class GooglePlace extends DataObject
             TextField::create('PlaceTitle', 'Place Title', $this->getPlaceField('name'))->setReadonly(true),
             TextField::create('PlaceID', 'Place ID'),
             LiteralField::create('Message', '<div class="message notice"><p>Use the map below to find your location, then copy the Place ID into the field above.</p></div>'),
+            // ToggleCompositeField is causing issues with the elements not rendering before the script executes
             ToggleCompositeField::create('PlaceMap', 'Map', [
-                // Use map listed in the guides. If it stops working, we'll have to figure out how best to get the place ID
-                LiteralField::create('SelectorMap', '<iframe src="https://geo-devrel-javascript-samples.web.app/samples/places-placeid-finder/app/dist/" allow="fullscreen; " style="width: 100%; height: 400px;" loading="lazy"></iframe>'),
+                GoogleMapField::create('MapFrame', 'places'),
             ])->setHeadingLevel(4)->setStartClosed($this->PlaceID ? true : false),
         ]);
 

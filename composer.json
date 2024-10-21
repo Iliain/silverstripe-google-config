@@ -22,7 +22,8 @@
     },
     "extra": {
         "expose": [
-            "client/css"
+            "client/css",
+            "client/javscript"
         ]
     },
     "minimum-stability": "dev"
