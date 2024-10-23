@@ -5,6 +5,7 @@ namespace Iliain\GoogleConfig\Fields;
 use SilverStripe\Core\Environment;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\DatalessField;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 
 class GoogleMapField extends DatalessField
 {
@@ -42,7 +43,7 @@ class GoogleMapField extends DatalessField
      *
      * @return $this
      */
-    public function setMapType($mapType)
+    public function setMapType($mapType): static
     {
         if ($mapType) {
             $this->mapType = $mapType;
@@ -56,7 +57,7 @@ class GoogleMapField extends DatalessField
     /**
      * @return string
      */
-    public function getMapType()
+    public function getMapType(): string
     {
         return $this->mapType;
     }
@@ -66,7 +67,7 @@ class GoogleMapField extends DatalessField
      *
      * @return $this
      */
-    public function setUrlParams($urlParams)
+    public function setUrlParams($urlParams): static
     {
         $urlParams['loading'] = 'async';
         $urlParams['callback'] = 'initMap';
@@ -84,12 +85,12 @@ class GoogleMapField extends DatalessField
     /**
      * @return array
      */
-    public function getUrlParams()
+    public function getUrlParams(): array
     {
         return $this->urlParams;
     }
 
-    public function Field($properties = [])
+    public function Field($properties = []): DBHTMLText
     {
         Requirements::css('iliain/silverstripe-google-config: client/css/map-field.css');
 
@@ -116,10 +117,10 @@ class GoogleMapField extends DatalessField
      * Returns the URL for the Google Maps API with relevant parameters
      * @return string
      */
-    public function getMapURL()
+    public function getMapURL(): string
     {
         if (!Environment::getEnv('GOOGLE_MAPS_API_KEY')) {
-            throw new \Exception('No Google Maps API key set');
+            user_error('Google Maps API key is not set', E_USER_ERROR);
         }
 
         $url = 'https://maps.googleapis.com/maps/api/js?key=' . Environment::getEnv('GOOGLE_MAPS_API_KEY');

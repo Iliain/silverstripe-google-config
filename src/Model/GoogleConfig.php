@@ -3,9 +3,9 @@
 namespace Iliain\GoogleConfig\Models;
 
 use SilverStripe\ORM\DB;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
+use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\FormAction;
@@ -17,7 +17,9 @@ use Iliain\GoogleConfig\Models\GooglePlace;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\View\TemplateGlobalProvider;
 use Iliain\GoogleConfig\Admin\GoogleLeftAndMain;
+use SilverStripe\Core\Environment;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use SilverStripe\Forms\LiteralField;
 
 class GoogleConfig extends DataObject implements TemplateGlobalProvider
 {
@@ -34,16 +36,17 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
         'CMS_ACCESS_LeftAndMain'
     ];
 
-    public function onBeforeWrite()
+    public function onBeforeWrite(): void
     {
         parent::onBeforeWrite();
     }
 
-    public function getCMSFields()
+    public function getCMSFields(): FieldList
     {
         // Configure default tabs
         $fields = new FieldList(
             new TabSet("Root",
+                'Root',
                 $tabGTM = new Tab('GTM'),
                 $tabPlaces = new Tab('Places'),
             ),
@@ -54,6 +57,7 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
         $tabGTM->setTitle(_t(self::class . '.TABGTM', "GTM"));
         $tabPlaces->setTitle(_t(self::class . '.TABPLACES', "Places"));
 
+        // GTM
         $fields->addFieldsToTab('Root.GTM', [
             HeaderField::create('GTMHeader', 'Configure Google Tag Manager'),
             TextareaField::create('HeadScripts', 'Scripts inside <head>')->setRows(10),
@@ -61,14 +65,19 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
             TextareaField::create('BodyEndScripts', 'Scripts before </body>')->setRows(10),
         ]);
 
-        $reviewGridConf = GridFieldConfig_RecordEditor::create()::create();
-        $grid = GridField::create(
-            'Places',
-            'Places',
-            GooglePlace::get(),
-            $reviewGridConf
-        );
-        $fields->addFieldToTab('Root.Places', $grid);
+        // Places
+        if (Environment::getEnv('GOOGLE_MAPS_API_KEY')) {
+            $reviewGridConf = GridFieldConfig_RecordEditor::create()::create();
+            $grid = GridField::create(
+                'Places',
+                'Places',
+                GooglePlace::get(),
+                $reviewGridConf
+            );
+            $fields->addFieldToTab('Root.Places', $grid);
+        } else {
+            $fields->addFieldToTab('Root.Places', LiteralField::create('PlacesNotice', '<p class="message warning">Google Maps API key is not set</p>'));
+        }
 
         $this->extend('updateCMSFields', $fields);
 
@@ -82,7 +91,7 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
      *
      * @return FieldList
      */
-    public function getCMSActions()
+    public function getCMSActions(): FieldList
     {
         if (Permission::check('ADMIN') || Permission::check('EDIT_SITECONFIG')) {
             $actions = new FieldList(
@@ -103,7 +112,7 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
     /**
      * @return string
      */
-    public function CMSEditLink()
+    public function CMSEditLink(): string
     {
         return GoogleLeftAndMain::singleton()->Link();
     }
@@ -114,7 +123,7 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
      *
      * @return GoogleConfig
      */
-    public static function current_google_config()
+    public static function current_google_config(): GoogleConfig
     {
         /** @var GoogleConfig $googleConfig */
         $googleConfig = DataObject::get_one(GoogleConfig::class);
@@ -128,7 +137,7 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
     /**
      * Setup a default GoogleConfig record if none exists.
      */
-    public function requireDefaultRecords()
+    public function requireDefaultRecords(): void
     {
         parent::requireDefaultRecords();
 
@@ -146,7 +155,7 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
      *
      * @return GoogleConfig
      */
-    public static function make_google_config()
+    public static function make_google_config(): GoogleConfig
     {
         $config = GoogleConfig::create();
         $config->write();
@@ -157,14 +166,19 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
     /**
      * Add $GoogleConfig to all SSViewers
      */
-    public static function get_template_global_variables()
+    public static function get_template_global_variables(): array
     {
         return [
             'GoogleConfig' => 'current_google_config',
         ];
     }
 
-    public function getPlaces()
+    /**
+     * Get all places
+     *
+     * @return DataList
+     */
+    public function getPlaces(): DataList
     {
         return GooglePlace::get();
     }

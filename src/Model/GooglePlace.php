@@ -3,9 +3,9 @@
 namespace Iliain\GoogleConfig\Models;
 
 use Exception;
-use Iliain\GoogleConfig\Fields\GoogleMapField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Core\Environment;
 use SilverStripe\Forms\HeaderField;
@@ -14,16 +14,26 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Forms\ToggleCompositeField;
+use Iliain\GoogleConfig\Fields\GoogleMapField;
 
 class GooglePlace extends DataObject 
 {
+    /**
+     * @var string
+     */
     private static $table_name= 'GooglePlace';
 
+    /**
+     * @var array
+     */
     private static $db = [
         'PlaceID'           => 'Varchar(255)',
         'PlaceData'         => 'Text',
     ];
 
+    /**
+     * @var array
+     */
     private static $summary_fields = [
         'getCMSImage'       => 'Image',
         'Title'             => 'Title',
@@ -31,11 +41,14 @@ class GooglePlace extends DataObject
         'PlaceID'           => 'Place ID'
     ];
 
+    /**
+     * @var array
+     */
     private static $searchable_fields = [
         'PlaceID'
     ];
 
-    public function onBeforeWrite()
+    public function onBeforeWrite(): void
     {
         parent::onBeforeWrite();
 
@@ -48,12 +61,18 @@ class GooglePlace extends DataObject
         }
     }
 
-    public function getTitle()
+    /**
+     * @return mixed
+     */
+    public function getTitle(): mixed
     {
         return $this->getPlaceField('name');
     }
 
-    public function getCMSFields()
+    /**
+     * @return FieldList
+     */
+    public function getCMSFields(): FieldList
     {
         $fields = parent::getCMSFields();
 
@@ -95,7 +114,7 @@ class GooglePlace extends DataObject
      * @param string|null $placeID
      * @return string|null
      */
-    public function getAPIURL($placeID)
+    public function getAPIURL($placeID): ?string
     {
         $key = Environment::getEnv('GOOGLE_MAPS_API_KEY');
 
@@ -106,7 +125,11 @@ class GooglePlace extends DataObject
         return 'https://maps.googleapis.com/maps/api/place/details/json?place_id=' . $placeID . '&fields=name,rating,reviews,icon,photos,url,user_ratings_total&key=' . $key;
     }
 
-    public function getPlaceRating()
+    /**
+     * Get the rating for the place
+     * @return string
+     */
+    public function getPlaceRating(): string
     {
         return $this->getPlaceField('rating') . ' star' . ($this->getPlaceField('rating') != '1' ? 's' : '');
     }
@@ -115,7 +138,7 @@ class GooglePlace extends DataObject
      * Get the URL for the place photo
      * @return string|null
      */
-    public function getPlacePhoto()
+    public function getPlacePhoto(): mixed
     {
         $key = Environment::getEnv('GOOGLE_MAPS_API_KEY');
         $data = $this->PlaceData;
@@ -143,7 +166,7 @@ class GooglePlace extends DataObject
      * @param string|null $placeID
      * @return string|null
      */
-    public function populatePlaceData($placeID = null)
+    public function populatePlaceData($placeID = null): mixed
     {
         try {
             if (!$placeID) {
@@ -171,7 +194,12 @@ class GooglePlace extends DataObject
         }
     }
 
-    public function getPlaceField($field)
+    /**
+     * Get a specified field from the stored place data
+     * @param string $field
+     * @return mixed
+     */
+    public function getPlaceField($field): mixed
     {
         $data = $this->PlaceData;
         if (!$data) {
@@ -191,7 +219,7 @@ class GooglePlace extends DataObject
      * Get the reviews for this place from our stored data
      * @return ArrayList|null
      */
-    public function getPlaceReviews()
+    public function getPlaceReviews(): ?ArrayList
     {
         $data = $this->PlaceData;
         if (!$data) {
@@ -225,14 +253,23 @@ class GooglePlace extends DataObject
         return null;
     }
 
-    public function getCMSImage()
+    /**
+     * Get the thumbnail image for the place
+     * @return DBHTMLText
+     */
+    public function getCMSImage(): DBHTMLText
     {
         $text = DBHTMLText::create('Thumbnail');
         $text->setValue('<img src="' . $this->getPlacePhoto() . '" style="width: 100px; height: 100px; object-fit: cover;" />');
         return $text;
     }
 
-    public function convertRatingNumberToArray($rating)
+    /**
+     * Convert the rating number to an array of stars
+     * @param string $rating
+     * @return ArrayList
+     */
+    public function convertRatingNumberToArray($rating): ArrayList
     {
         $ratingArr = explode('.', $rating);
             
@@ -261,7 +298,11 @@ class GooglePlace extends DataObject
         return $stars;
     }
 
-    public function getReviewData()
+    /**
+     * Structure the place data
+     * @return array
+     */
+    public function getReviewData(): array
     {
         $rating = $this->getPlaceField('rating');
         $stars = $this->convertRatingNumberToArray($rating);
@@ -280,7 +321,11 @@ class GooglePlace extends DataObject
         return $data;
     }
 
-    public function getReviewsList()
+    /**
+     * Returns a rendered list of reviews
+     * @return DBHTMLText|null
+     */
+    public function getReviewsList(): ?DBHTMLText
     {
         $reviews = $this->getPlaceReviews();
 
@@ -293,7 +338,11 @@ class GooglePlace extends DataObject
         return null;
     }
 
-    public function getBadge()
+    /**
+     * Returns a rendered badge of the place
+     * @return DBHTMLText
+     */
+    public function getBadge(): DBHTMLText
     {
         return $this->customise($this->getReviewData())->renderWith('Iliain\\GoogleConfig\\Models\\ReviewBadge');
     }
