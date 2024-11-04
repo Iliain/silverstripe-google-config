@@ -18,6 +18,7 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\View\TemplateGlobalProvider;
 use Iliain\GoogleConfig\Admin\GoogleLeftAndMain;
 use SilverStripe\Core\Environment;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use SilverStripe\Forms\LiteralField;
 
@@ -53,6 +54,8 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
             new HiddenField('ID')
         );
 
+        $enabledPanels = $this->config()->get('enabled_panels');
+
         // Set custom tab names
         $tabGTM->setTitle(_t(self::class . '.TABGTM', "GTM"));
         $tabPlaces->setTitle(_t(self::class . '.TABPLACES', "Places"));
@@ -77,6 +80,12 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
             $fields->addFieldToTab('Root.Places', $grid);
         } else {
             $fields->addFieldToTab('Root.Places', LiteralField::create('PlacesNotice', '<p class="message warning">Google Maps API key is not set</p>'));
+        }
+
+        foreach ($enabledPanels as $panel => $enabled) {
+            if (!$enabled) {
+                $fields->removeByName($panel);
+            }
         }
 
         $this->extend('updateCMSFields', $fields);

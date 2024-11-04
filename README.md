@@ -14,6 +14,20 @@ Provides an admin interface separate from the Settings panel that lets users man
 
 ## Config
 
+Enable/disable specific tabs in the CMS by adding the following yaml config:
+
+```yml
+---
+Name: myproject-google-config
+After: 'google-config'
+---
+Iliain\GoogleConfig\Models\GoogleConfig:
+  enabled_panels:
+    GTM: true
+    Places: false # setting to false will hide the tab
+
+```
+
 Depending on which APIs you're using, you may need to include environment variables for your keys, like so:
 
 ```

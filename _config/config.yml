@@ -1,0 +1,7 @@
+---
+Name: google-config
+---
+Iliain\GoogleConfig\Models\GoogleConfig:
+  enabled_panels:
+    GTM: true
+    Places: true
