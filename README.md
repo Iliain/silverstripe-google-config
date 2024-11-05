@@ -6,7 +6,7 @@
 [![License](https://poser.pugx.org/iliain/silverstripe-google-config/license)](https://packagist.org/packages/iliain/silverstripe-google-config) 
 [![PHP Version Require](https://poser.pugx.org/iliain/silverstripe-google-config/require/php)](https://packagist.org/packages/iliain/silverstripe-google-config)
 
-Provides an admin interface separate from the Settings panel that lets users manage things like their GTM scripts, reviews, etc.
+Provides an admin interface separate from the Settings panel that lets users manage things like their GTM scripts, schema, reviews, etc.
 
 ## Installation (with composer)
 
@@ -24,8 +24,8 @@ After: 'google-config'
 Iliain\GoogleConfig\Models\GoogleConfig:
   enabled_panels:
     GTM: true
+    Schema: true
     Places: false # setting to false will hide the tab
-
 ```
 
 Depending on which APIs you're using, you may need to include environment variables for your keys, like so:
@@ -43,6 +43,8 @@ Currently this module uses the following APIs:
 You can call data from the Google settings on the frontend via `$GoogleConfig`, like so:
 
 ```
+{$GoogleConfig.SchemaCode.RAW}
+
 {$GoogleConfig.HeadScripts.RAW}
 
 <% with $GoogleConfig %>
@@ -62,6 +64,13 @@ You can render the GTM scripts in your template with the following:
 * `$BodyStartScripts.RAW`
 * `$BodyEndScripts.RAW`
 
+## Schema
+
+You can configure the global schema data in the CMS, and render it in your template with `$GoogleConfig.SchemaCode.RAW`.
+
+When editing the schema, you have the option to add Objects and/or Properties. Properties are single name/value pairs, while Objects can contain multiple Properties (good for addresses, etc.).
+
+A tab named Output will display the expected output of your configured schema.
 
 ## Places 
 
@@ -76,4 +85,4 @@ With a selected Place, you can render the badge and feed in your template with `
 * Fix the issue of the CMS needing to be reloaded for the map to appear when going back and viewing another map
 * Add more APIs
 * Update CSS to properly render as-is on the frontend (like a widget)
-* Allow enabling/disabling of specific Admin sections
+* Page specific schema?
