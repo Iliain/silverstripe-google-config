@@ -10,13 +10,13 @@
 
 			<% if $Fields.hasTabset %>
 				<% with $Fields.fieldByName('Root') %>
-				<div class="cms-content-header-tabs cms-tabset-nav-primary ss-ui-tabs-nav">
-					<ul class="cms-tabset-nav-primary">
-					<% loop $Tabs %>
-						<li<% if $extraClass %> class="$extraClass"<% end_if %>><a href="#$id">$Title</a></li>
-					<% end_loop %>
-					</ul>
-				</div>
+					<div class="cms-content-header-tabs cms-tabset-nav-primary ss-ui-tabs-nav">
+						<ul class="cms-tabset-nav-primary">
+							<% loop $Tabs %>
+								<li<% if $extraClass %> class="$extraClass"<% end_if %>><a href="#$id">$Title</a></li>
+							<% end_loop %>
+						</ul>
+					</div>
 				<% end_with %>
 			<% end_if %>
 		<% end_with %>
