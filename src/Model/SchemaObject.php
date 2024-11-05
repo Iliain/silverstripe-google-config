@@ -94,7 +94,7 @@ class SchemaObject extends DataObject
 
         $fields->dataFieldByName('Title')
             ->setTitle('Name')
-            ->setDescription('This is descriptive and not used in the schema; you\'ll need to add a property for the name if required.');
+            ->setDescription('This is used only for the object; you\'ll need to add a separate property for the name if required.');
 
         $fields->insertAfter('Title', TextField::create('Type', 'Type'));
 
