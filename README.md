@@ -56,7 +56,7 @@ You can call data from the Google settings on the frontend via `$GoogleConfig`, 
 <% end_with %>
 ```
 
-## Permissions
+### Permissions
 
 You'll need to be either an Administrator, or have the `CMS_ACCESS_GoogleConfig` permission to access and edit the Google Config section in the CMS.
 
