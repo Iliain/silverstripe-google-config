@@ -52,7 +52,7 @@ class GoogleLeftAndMain extends LeftAndMain
     /**
      * @var array
      */
-    private static $required_permission_codes = array('EDIT_SITECONFIG');
+    private static $required_permission_codes = 'CMS_ACCESS_GoogleConfig';
 
     /**
      * Initialises the {@link GoogleConfig} controller.

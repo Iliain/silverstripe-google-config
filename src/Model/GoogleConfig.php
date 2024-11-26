@@ -2,7 +2,6 @@
 
 namespace Iliain\GoogleConfig\Models;
 
-use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\ORM\DB;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\ORM\DataList;
@@ -19,6 +18,7 @@ use SilverStripe\Security\Permission;
 use Iliain\GoogleConfig\Models\GooglePlace;
 use SilverStripe\Forms\GridField\GridField;
 use Iliain\GoogleConfig\Models\SchemaObject;
+use SilverStripe\Security\PermissionProvider;
 use SilverStripe\View\TemplateGlobalProvider;
 use Iliain\GoogleConfig\Models\SchemaProperty;
 use Iliain\GoogleConfig\Admin\GoogleLeftAndMain;
@@ -26,13 +26,14 @@ use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldButtonRow;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
 use Symbiote\GridFieldExtensions\GridFieldEditableColumns;
 use Symbiote\GridFieldExtensions\GridFieldAddNewInlineButton;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 
-class GoogleConfig extends DataObject implements TemplateGlobalProvider
+class GoogleConfig extends DataObject implements TemplateGlobalProvider, PermissionProvider
 {
     private static $table_name = 'GoogleConfig';
 
@@ -179,7 +180,7 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
      */
     public function getCMSActions(): FieldList
     {
-        if (Permission::check('ADMIN') || Permission::check('EDIT_SITECONFIG')) {
+        if (Permission::check('ADMIN') || Permission::check('CMS_ACCESS_GoogleConfig')) {
             $actions = new FieldList(
                 FormAction::create(
                     'save_googleconfig',
@@ -294,5 +295,21 @@ class GoogleConfig extends DataObject implements TemplateGlobalProvider
         $schemaStr .= '</script>';
     
         return $schemaStr;
+    }
+
+    public function canEdit($member = null): bool
+    {
+        return Permission::check('CMS_ACCESS_GoogleConfig', 'any', $member);
+    }
+
+    public function providePermissions()
+    {
+        return [
+            'CMS_ACCESS_GoogleConfig' => [
+                'name' => 'Access to \'Google\' section',
+                'category' => 'CMS Access',
+                'help' => 'Allow viewing, adding, and editing Google settings.',
+            ]
+        ];
     }
 }

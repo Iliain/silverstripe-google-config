@@ -4,6 +4,7 @@ namespace Iliain\GoogleConfig\Models;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Security\Permission;
 
 class SchemaProperty extends DataObject 
 {
@@ -69,5 +70,25 @@ class SchemaProperty extends DataObject
         $this->extend('updateCMSFields', $fields);
 
         return $fields;
+    }
+
+    public function canView($member = null): bool
+    {
+        return true;
+    }
+
+    public function canEdit($member = null): bool
+    {
+        return Permission::check('CMS_ACCESS_GoogleConfig', 'any', $member);
+    }
+
+    public function canCreate($member = null, $context = []): bool
+    {
+        return $this->canEdit($member);
+    }
+
+    public function canDelete($member = null): bool
+    {
+        return $this->canEdit($member);
     }
 }

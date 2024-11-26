@@ -5,18 +5,19 @@ namespace Iliain\GoogleConfig\Models;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Security\Permission;
 use SilverStripe\Forms\GridField\GridField;
 use Iliain\GoogleConfig\Models\GoogleConfig;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldButtonRow;
-use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
-use SilverStripe\Forms\LiteralField;
 use Symbiote\GridFieldExtensions\GridFieldEditableColumns;
 use Symbiote\GridFieldExtensions\GridFieldAddNewInlineButton;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 
 class SchemaObject extends DataObject 
 {
@@ -180,5 +181,25 @@ class SchemaObject extends DataObject
 
     
         return json_encode($schemaData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    }
+
+    public function canView($member = null): bool
+    {
+        return true;
+    }
+
+    public function canEdit($member = null): bool
+    {
+        return Permission::check('CMS_ACCESS_GoogleConfig', 'any', $member);
+    }
+
+    public function canCreate($member = null, $context = []): bool
+    {
+        return $this->canEdit($member);
+    }
+
+    public function canDelete($member = null): bool
+    {
+        return $this->canEdit($member);
     }
 }

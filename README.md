@@ -56,6 +56,10 @@ You can call data from the Google settings on the frontend via `$GoogleConfig`, 
 <% end_with %>
 ```
 
+## Permissions
+
+You'll need to be either an Administrator, or have the `CMS_ACCESS_GoogleConfig` permission to access and edit the Google Config section in the CMS.
+
 ### GTM Scripts
 
 You can render the GTM scripts in your template with the following: 

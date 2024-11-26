@@ -15,6 +15,7 @@ use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Forms\ToggleCompositeField;
 use Iliain\GoogleConfig\Fields\GoogleMapField;
+use SilverStripe\Security\Permission;
 
 class GooglePlace extends DataObject 
 {
@@ -345,5 +346,25 @@ class GooglePlace extends DataObject
     public function getBadge(): DBHTMLText
     {
         return $this->customise($this->getReviewData())->renderWith('Iliain\\GoogleConfig\\Models\\ReviewBadge');
+    }
+
+    public function canView($member = null): bool
+    {
+        return true;
+    }
+
+    public function canEdit($member = null): bool
+    {
+        return Permission::check('CMS_ACCESS_GoogleConfig', 'any', $member);
+    }
+
+    public function canCreate($member = null, $context = []): bool
+    {
+        return $this->canEdit($member);
+    }
+
+    public function canDelete($member = null): bool
+    {
+        return $this->canEdit($member);
     }
 }
