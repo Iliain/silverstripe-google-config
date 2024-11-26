@@ -38,6 +38,10 @@ Currently this module uses the following APIs:
 
 * Google Places
 
+### Permissions
+
+You'll need to be either an Administrator, or have the `CMS_ACCESS_GoogleConfig` permission to access and edit the Google Config section in the CMS.
+
 ## Usage
 
 You can call data from the Google settings on the frontend via `$GoogleConfig`, like so:
@@ -55,10 +59,6 @@ You can call data from the Google settings on the frontend via `$GoogleConfig`, 
     <% end_if %>
 <% end_with %>
 ```
-
-### Permissions
-
-You'll need to be either an Administrator, or have the `CMS_ACCESS_GoogleConfig` permission to access and edit the Google Config section in the CMS.
 
 ### GTM Scripts
 
